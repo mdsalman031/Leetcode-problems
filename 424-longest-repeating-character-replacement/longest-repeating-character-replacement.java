@@ -11,7 +11,6 @@ class Solution {
             if((right - left + 1) - maxFreq > k) {
                 hash[s.charAt(left) - 'A']--;
                 left++;
-                for(int num : hash) maxFreq = Math.max(maxFreq, num);
             } else {
                 maxLen = Math.max(maxLen, right - left + 1);
             }
