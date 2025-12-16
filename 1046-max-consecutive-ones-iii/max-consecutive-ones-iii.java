@@ -7,10 +7,8 @@ class Solution {
             if(nums[right] == 0) zeros++;
             if(zeros <= k) maxLen = Math.max(maxLen, right - left + 1);
             else {
-                while(zeros > k)  {
-                    if(nums[left] == 0) zeros--;
-                    left++;
-                }
+                if(nums[left] == 0) zeros--;
+                left++;
             }
             right++;
         }
