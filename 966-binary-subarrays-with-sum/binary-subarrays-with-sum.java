@@ -17,6 +17,16 @@ class Solution {
         return count;
     }
     public int numSubarraysWithSum(int[] nums, int goal) {
+        // (subarrays with sum ≤ goal)
+        //     − (subarrays with sum ≤ goal − 1)
+        //     = subarrays with sum == goal
+        // Set A : 0, 1, 2, ..., goal
+        // Set B : 0, 1, 2, ..., goal - 1
+        // The only subarrays that are in A but NOT in B are:
+        //     subarrays with sum == goal
+        //     Because:
+        //     B stops at goal − 1
+        //     A goes up to goal
         int sumLessThanEqualGoal = helper(nums, goal);
         int sumLessThanEqualGoalMinus1 = helper(nums, goal - 1);
         return (sumLessThanEqualGoal - sumLessThanEqualGoalMinus1);
