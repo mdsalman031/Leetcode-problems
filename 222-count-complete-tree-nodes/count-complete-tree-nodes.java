@@ -14,15 +14,30 @@
  * }
  */
 class Solution {
-    int count = 0;
-    private void preorder(TreeNode node) {
-        if(node == null) return;
-        count++;
-        preorder(node.left);
-        preorder(node.right);
+    private int findLeftHeight(TreeNode node) {
+        int height = 0;
+        while(node != null) {
+            height++;
+            node = node.left;
+        }
+        return height;
+    }
+    private int findRightHeight(TreeNode node) {
+        int height = 0;
+        while(node != null) {
+            height++;
+            node = node.right;
+        }
+        return height;
     }
     public int countNodes(TreeNode root) {
-        preorder(root);
-        return count;
+        if(root == null) return 0;
+
+        int lh = findLeftHeight(root);
+        int rh = findRightHeight(root);
+
+        if(lh == rh) return (1<<lh) - 1; // 2^h - 1
+
+        return 1 + countNodes(root.left) + countNodes(root.right);
     }
 }
