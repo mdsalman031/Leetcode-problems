@@ -14,16 +14,31 @@
  * }
  */
 class Solution {
-    List<Integer> inorder = new ArrayList<>();
-    private void inorder(TreeNode node) {
-        if(node == null) return;
-        inorder(node.left);
-        inorder.add(node.val);
-        inorder(node.right);
-    }
     public int kthSmallest(TreeNode root, int k) {
-        inorder(root);
-        int kSmallest = inorder.get(k - 1);
-        return kSmallest;
+        // Using Morris inorder traversal
+        int count = 0;
+        TreeNode cur = root;
+        while(cur != null) {
+            if(cur.left == null) {
+                count++;
+                if(count == k) return cur.val;
+                cur = cur.right;
+            } else {
+                TreeNode prev = cur.left;
+                while(prev.right != null && prev.right != cur) {
+                    prev = prev.right;
+                }
+                if(prev.right == null) {
+                    prev.right = cur;
+                    cur = cur.left;
+                } else {
+                    prev.right = null;
+                    count++;
+                    if(count == k) return cur.val;
+                    cur = cur.right;
+                }
+            }
+        }
+        return -1;
     }
 }
