@@ -14,26 +14,48 @@
  * }
  */
 class Solution {
-    TreeNode first = null, second = null, prev = null;
-    private void inorder(TreeNode node) {
-        if(node == null) return;
-        inorder(node.left);
+    public void recoverTree(TreeNode root) {
+        TreeNode first = null, second = null, prevVal = null;
+        TreeNode cur = root;
 
-        if(prev != null && prev.val > node.val) {
-            if(first == null) {
-                first = prev;
-                second = node;
+        while (cur != null) {
+            if (cur.left == null) {
+                if (prevVal != null && prevVal.val > cur.val) {
+                    if (first == null) {
+                        first = prevVal;
+                        second = cur;
+                    } else {
+                        second = cur;
+                    }
+                }
+                prevVal = cur;
+                cur = cur.right;
             } else {
-                second = node;
+                TreeNode prev = cur.left;
+                while (prev.right != null && prev.right != cur) {
+                    prev = prev.right;
+                }
+
+                if (prev.right == null) {
+                    prev.right = cur;
+                    cur = cur.left;
+                } else {
+                    prev.right = null;
+                    if (prevVal != null && prevVal.val > cur.val) {
+                        if (first == null) {
+                            first = prevVal;
+                            second = cur;
+                        } else {
+                            second = cur;
+                        }
+                    }
+                    prevVal = cur;
+                    cur = cur.right;
+                }
             }
         }
-        prev = node;
 
-        inorder(node.right);
-    }
-    public void recoverTree(TreeNode root) {
-        inorder(root);
-        if(first != null && second != null) {
+        if (first != null && second != null) {
             int temp = first.val;
             first.val = second.val;
             second.val = temp;
