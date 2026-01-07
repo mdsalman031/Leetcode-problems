@@ -1,47 +1,30 @@
-class Pair {
-    int first;
-    int second;
-    public Pair(int first, int second) {
-        this.first = first;
-        this.second = second;
-    }
-}
 class Solution {
-    private void bfs(int[][] image, int r, int c, int original, int newColor) {
+    private void dfs(int[][] image, int[][] ans, int row, int col, int[] drow, int[] dcol, int orgColor, int newColor) {
         int n = image.length;
         int m = image[0].length;
-        Queue<Pair> q = new ArrayDeque<>();
-        q.offer(new Pair(r, c));
-        image[r][c] = newColor;
 
-        int[] drow = {-1, 0, 1, 0};
-        int[] dcol = {0, 1, 0, -1};
+        ans[row][col] = newColor;
 
-        while(!q.isEmpty()) {
-            int row = q.peek().first;
-            int col = q.peek().second;
-            q.poll();
+        for(int k = 0 ; k < 4 ; k++) {
+            int nrow = row + drow[k];
+            int ncol = col + dcol[k];
 
-            for(int k = 0 ; k < 4 ; k++) {
-                int nrow = row + drow[k];
-                int ncol = col + dcol[k];
-                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                        image[nrow][ncol] == original) {
-                    image[nrow][ncol] = newColor;
-                    q.offer(new Pair(nrow, ncol));
-                }
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
+                image[nrow][ncol] == orgColor && ans[nrow][ncol] != newColor) {
+                dfs(image, ans, nrow, ncol, drow, dcol, orgColor, newColor);
             }
         }
     }
     public int[][] floodFill(int[][] image, int sr, int sc, int color) {
         int n = image.length;
         int m = image[0].length;
+        int[][] ans = image;
 
-        int original = image[sr][sc];
-        if(original == color) return image;
+        int[] drow = {-1, 0, 1, 0};
+        int[] dcol = {0, 1, 0, -1};
 
-        bfs(image, sr, sc, original, color);
-        
-        return image;
+        dfs(image, ans, sr, sc, drow, dcol, image[sr][sc], color);
+
+        return ans;
     }
 }
