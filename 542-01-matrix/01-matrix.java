@@ -24,29 +24,23 @@ class Solution {
 
         int[] drow = {-1, 0, 1, 0};
         int[] dcol = {0, 1, 0, -1};
-        int level = 0;
 
         while(!q.isEmpty()) {
-            int size = q.size();
-            level++;
+            int row = q.peek().first;
+            int col = q.peek().second;
+            q.poll();
 
-            for(int i = 0 ; i < size ; i++) {
-                int row = q.peek().first;
-                int col = q.peek().second;
-                q.poll();
+            for(int k = 0 ; k < 4 ; k++) {
+                int nrow = row + drow[k];
+                int ncol = col + dcol[k];
 
-                for(int k = 0 ; k < 4 ; k++) {
-                    int nrow = row + drow[k];
-                    int ncol = col + dcol[k];
-
-                    if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
-                            visited[nrow][ncol] == 0) {
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && 
+                        visited[nrow][ncol] == 0) {
+                    if(grid[nrow][ncol] == 1) {
                         visited[nrow][ncol] = 1;
-                        if(grid[nrow][ncol] == 1) {
-                            dist[nrow][ncol] = level;
-                            q.offer(new Pair(nrow, ncol));
-                        } 
-                    }
+                        dist[nrow][ncol] = dist[row][col] + 1;
+                        q.offer(new Pair(nrow, ncol));
+                    } 
                 }
             }
         }
