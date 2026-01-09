@@ -32,7 +32,7 @@ class Solution {
         int V = graph.length;
         int[] color = new int[V];
 
-        for(int i = 0 ; i < V ; i++) color[i] = -1;
+        Arrays.fill(color, -1);
 
         for(int i = 0 ; i < V ; i++) {
             if(color[i] == -1) {
