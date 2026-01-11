@@ -1,26 +1,10 @@
 class Solution {
-    private boolean dfsCheck(List<List<Integer>> adj, boolean[] visited, boolean[] pathVisited, int node) {
-        visited[node] = true;
-        pathVisited[node] = true;
-
-        for(int adjacent : adj.get(node)) {
-            if(!visited[adjacent]) {
-                if(dfsCheck(adj, visited, pathVisited, adjacent)) 
-                    return true;
-            }
-            else if(pathVisited[adjacent])
-                return true;
-        }
-
-        pathVisited[node] = false;
-
-        return false;
-    }
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> adj = new ArrayList<>();
-        boolean[] visited = new boolean[numCourses];
-        boolean[] pathVisited = new boolean[numCourses];
+        // Using topological sort to determine a schedule of courses
+        // If the schedule (linear ordering) contains all the courses, then return true otherwise false
+        // Using Kahn's algorithm to find topo sort
 
+        List<List<Integer>> adj = new ArrayList<>();
         for(int i = 0 ; i < numCourses ; i++) {
             adj.add(new ArrayList<>());
         }
@@ -31,12 +15,32 @@ class Solution {
             adj.get(src).add(dest);
         }
 
+        // Step 1 : Store all indegrees
+        int[] indegree = new int[numCourses];
         for(int i = 0 ; i < numCourses ; i++) {
-            if(!visited[i]) {
-                if(dfsCheck(adj, visited, pathVisited, i)) 
-                    return false;
+            for(int adjacent : adj.get(i)) {
+                indegree[adjacent]++;
             }
         }
-        return true;
+
+        // Step 2 : Enqueue all the nodes with indegree 0
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0 ; i < numCourses ; i++) {
+            if(indegree[i] == 0) q.add(i);
+        }
+
+        // Step 3 : Pop the queue and store element in topo, and if its adjacent nodes have indegree 0 push them to queue
+        List<Integer> topo = new ArrayList<>();
+        while(!q.isEmpty()) {
+            int node = q.poll();
+            topo.add(node);
+
+            for(int adjacent : adj.get(node)) {
+                indegree[adjacent]--;
+                if(indegree[adjacent] == 0) q.add(adjacent);
+            }
+        }
+
+        return (topo.size() == numCourses) ? true : false;
     }
 }
