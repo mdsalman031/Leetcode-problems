@@ -11,12 +11,13 @@
  */
 public class Solution {
     public boolean hasCycle(ListNode head) {
-        ListNode temp = head;
+        ListNode slow = head;
+        ListNode fast = head;
         List<ListNode> visited = new ArrayList<>();
-        while(temp != null) {
-            if(!visited.isEmpty() && visited.contains(temp)) return true;
-            visited.add(temp);
-            temp = temp.next;
+        while(fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast) return true;
         }
         return false;
     }
