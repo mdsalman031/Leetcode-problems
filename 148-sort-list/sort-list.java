@@ -9,60 +9,48 @@
  * }
  */
 class Solution {
-    private void merge(List<Integer> arr, int low, int mid, int high) {
-        int left = low;
-        int right = mid + 1;
-        List<Integer> temp = new ArrayList<>();
+    private ListNode mergeTwoSortedLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode res = dummy;
 
-        while(left <= mid && right <= high) {
-            if(arr.get(left) <= arr.get(right)) {
-                temp.add(arr.get(left));
-                left++;
+        while(l1 != null && l2 != null) {
+            if(l1.val <= l2.val) {
+                res.next = l1;
+                l1 = l1.next;
             } else {
-                temp.add(arr.get(right));
-                right++;
+                res.next = l2;
+                l2 = l2.next;
             }
+            res = res.next;
         }
-        while(left <= mid) {
-            temp.add(arr.get(left));
-            left++;
+        if(l1 != null) {
+            res.next = l1;
+        } else {
+            res.next = l2;
         }
-        while(right <= high) {
-            temp.add(arr.get(right));
-            right++;
-        }
-        for(int i = low ; i <= high ; i++) {
-            arr.set(i, temp.get(i - low));
-        }
+        
+        return dummy.next;
     }
-    private void mergeSort(List<Integer> arr, int low, int high) {
-        if(low >= high) return;
-
-        int mid = (low + high) / 2;
-        mergeSort(arr, low, mid);
-        mergeSort(arr, mid + 1, high);
-        merge(arr, low, mid, high);
+    private ListNode getMid(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next.next;
+        while(fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
     }
     public ListNode sortList(ListNode head) {
         if(head == null || head.next == null) return head;
 
-        List<Integer> arr = new ArrayList<>();
+        ListNode mid = getMid(head);
+        ListNode left = head;
+        ListNode right = mid.next;
+        mid.next = null;
 
-        ListNode temp = head;
-        while(temp != null) {
-            arr.add(temp.val);
-            temp = temp.next;
-        }
+        left = sortList(left);
+        right = sortList(right);
 
-        mergeSort(arr, 0, arr.size() - 1);
-
-        ListNode dummy = new ListNode(-1);
-        temp = dummy;
-        for(int i = 0 ; i < arr.size() ; i++) {
-            temp.next = new ListNode(arr.get(i));
-            temp = temp.next;
-        }
-
-        return dummy.next;
+        return mergeTwoSortedLists(left, right);
     }
 }
