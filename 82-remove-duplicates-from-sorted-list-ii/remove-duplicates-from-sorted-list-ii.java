@@ -10,19 +10,17 @@
  */
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        Map<Integer, Integer> map = new TreeMap<>();
         ListNode dummy = new ListNode(-1);
-        ListNode res = dummy;
-        ListNode temp = head;
-        while(temp != null) {
-            map.put(temp.val, map.getOrDefault(temp.val, 0) + 1);
-            temp = temp.next;
-        }
-        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            if(entry.getValue() == 1) {
-                res.next = new ListNode(entry.getKey());
-                res = res.next;
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode current = head;
+        while(current != null) {
+            while(current.next != null && current.val == current.next.val) {
+                current = current.next;
             }
+            if(prev.next != current) prev.next = current.next;
+            else prev = prev.next;
+            current = current.next;
         }
         return dummy.next;
     }
