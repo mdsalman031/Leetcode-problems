@@ -1,14 +1,13 @@
 class Solution {
     public int singleNumber(int[] nums) {
-        Map<Integer, Integer> freq = new HashMap<>();
-        for(int num : nums) {
-            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        int ans = 0;
+        for(int bitIndex = 0 ; bitIndex < 32 ; bitIndex++) {
+            int count = 0;
+            for(int num : nums) {
+                if((num & (1 << bitIndex)) != 0) count++;
+            }
+            if(count % 3 != 0) ans = ans | (1 << bitIndex);
         }
-
-        for(Map.Entry<Integer, Integer> entry : freq.entrySet()) {
-            if(entry.getValue() == 1) return entry.getKey();
-        }
-
-        return 0;
+        return ans;
     }
 }
