@@ -2,22 +2,24 @@ class Solution {
     public int divide(int dividend, int divisor) {
         if(dividend == divisor) return 1;
 
-        if(dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
-
-        if(divisor == 1) return dividend;
-
         int sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;
 
-        long a = Math.abs((long) dividend);
-        long b = Math.abs((long) divisor);
+        long n = Math.abs((long) dividend);
+        long d = Math.abs((long) divisor);
+        int ans = 0;
 
-        long sum = 0;
-        int count = 0;
-        while(sum + b <= a) {
-            count++;
-            sum += b;
+        while(n >= d) {
+            int count = 0;
+            while(n >= (d << (count + 1))) {
+                count++;
+            }
+            ans += (1 << count);
+            n = n - (d << count);
         }
 
-        return sign*count;
+        if(ans == (1 << 31) && sign == 1) return Integer.MAX_VALUE;
+        if(ans == (1 << 31) && sign == -1) return Integer.MIN_VALUE;
+
+        return (sign == 1) ? ans : (-1 * ans);
     }
 }
