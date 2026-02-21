@@ -13,12 +13,11 @@ class Solution {
 
             int nextGreater = (stack.isEmpty()) ? -1 : stack.peek();
             stack.push(nums2[i]);
-            nums2[i] = nextGreater;
+            map.put(nums2[i], nextGreater);
         }
 
         for(int i = 0 ; i < n1 ; i++) {
-            int index = map.get(nums1[i]);
-            res[i] = nums2[index];
+            res[i] = map.get(nums1[i]);
         }
 
         return res;
