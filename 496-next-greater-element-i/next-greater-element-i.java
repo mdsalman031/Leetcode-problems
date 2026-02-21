@@ -6,14 +6,11 @@ class Solution {
         Map<Integer, Integer> map = new HashMap<>();
         Stack<Integer> stack = new Stack<>();
 
-        for(int i = 0 ; i < n2 ; i++) map.put(nums2[i], i);
-
         for(int i = n2 - 1 ; i >= 0 ; i--) {
             while(!stack.isEmpty() && stack.peek() <= nums2[i]) stack.pop();
 
-            int nextGreater = (stack.isEmpty()) ? -1 : stack.peek();
+            map.put(nums2[i], stack.isEmpty() ? -1 : stack.peek());
             stack.push(nums2[i]);
-            map.put(nums2[i], nextGreater);
         }
 
         for(int i = 0 ; i < n1 ; i++) {
