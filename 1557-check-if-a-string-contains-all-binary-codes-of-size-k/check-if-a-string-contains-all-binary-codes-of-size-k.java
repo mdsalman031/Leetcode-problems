@@ -10,12 +10,10 @@ class Solution {
         for(int i = 0 ; i < n ; i++) {
             code = ((code << 1) & (total - 1)) | (s.charAt(i) - '0');
 
-            if(i >= k - 1) {
-                if(!seen[code]) {
-                    seen[code] = true;
-                    count++;
-                    if(count == total) return true;
-                }
+            if(i >= k - 1 && !seen[code]) {
+                seen[code] = true;
+                count++;
+                if(count == total) return true;
             }
         }
 
