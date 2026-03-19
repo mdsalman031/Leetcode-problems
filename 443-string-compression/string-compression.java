@@ -13,7 +13,6 @@ class Solution {
             chars[ptr++] = ch;
 
             if(count > 1) {
-                chars[ptr] = ch;
                 String countStr = String.valueOf(count);
                 for(char num : countStr.toCharArray()) {
                     chars[ptr++] = num;
