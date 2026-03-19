@@ -9,17 +9,16 @@ class Solution {
                 i++;
                 count++;
             }
+
+            chars[ptr++] = ch;
+
             if(count > 1) {
                 chars[ptr] = ch;
-                StringBuilder sb = new StringBuilder(String.valueOf(count));
-                while(sb.length() > 0) {
-                    chars[++ptr] = sb.charAt(0);
-                    sb.deleteCharAt(0);
+                String countStr = String.valueOf(count);
+                for(char num : countStr.toCharArray()) {
+                    chars[ptr++] = num;
                 }
-            } else {
-                chars[ptr] = ch;
-            }
-            ptr++;
+            } 
         }
         return ptr;
     }
