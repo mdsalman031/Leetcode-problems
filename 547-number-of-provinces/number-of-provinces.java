@@ -6,9 +6,10 @@ class Solution {
         while(!q.isEmpty()) {
             int ele = q.poll();
             visited[ele] = true;
-            for(int neighbour = 0 ; neighbour < adj.length ; neighbour++) {
-                if(!visited[neighbour] && adj[ele][neighbour] == 1) {
-                    q.add(neighbour);
+            for(int neighnour = 0 ; neighnour < adj.length ; neighnour++) {
+                if(!visited[neighnour] && adj[ele][neighnour] == 1) {
+                    q.add(neighnour);
+                    visited[neighnour] = true;
                 }
             }
         }
