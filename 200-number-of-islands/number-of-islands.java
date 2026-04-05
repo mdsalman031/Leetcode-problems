@@ -1,50 +1,44 @@
-class Pair {
-    int first;
-    int second;
-    public Pair(int first, int second) {
-        this.first = first;
-        this.second = second;
-    }
-}
 class Solution {
-    private void bfs(char[][] grid, int[][] visited, int ro, int co, int n, int m) {
-        Queue<Pair> queue = new LinkedList<>();
-        queue.offer(new Pair(ro, co));
-        visited[ro][co] = 1;
+    private void bfs(char[][] grid, boolean[][] visited, int row, int col) {
+        visited[row][col] = true;
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{row, col});
+        int n = grid.length;
+        int m = grid[0].length;
 
-        int[] drow = {-1, 0, 1, 0};
-        int[] dcol = {0, 1, 0, -1};
+        int[] drow = {-1,0,1,0};
+        int[] dcol = {0,1,0,-1};
 
-        while(!queue.isEmpty()) {
-            int row = queue.peek().first;
-            int col = queue.peek().second;
-            queue.poll();
-            
-            for(int k = 0 ; k < 4 ; k++) {
-                int nrow = row + drow[k];
-                int ncol = col + dcol[k];
-                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                        visited[nrow][ncol] == 0 && grid[nrow][ncol] == '1') {
-                    visited[nrow][ncol] = 1;
-                    queue.offer(new Pair(nrow, ncol));
+        while(!q.isEmpty()) {
+            int[] node = q.poll();
+            int r = node[0];
+            int c = node[1];
+            for(int i = 0 ; i < 4 ; i++) {
+                int nrow = drow[i] + r;
+                int ncol = dcol[i] + c;
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&grid[nrow][ncol] == '1' && !visited[nrow][ncol]) {
+                    visited[nrow][ncol] = true;
+                    q.add(new int[]{nrow, ncol});
                 }
             }
         }
     }
+
     public int numIslands(char[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
-        int[][] visited = new int[n][m];
+        boolean[][] visited = new boolean[n][m];
+        int islands = 0;
 
-        int count = 0;
         for(int row = 0 ; row < n ; row++) {
             for(int col = 0 ; col < m ; col++) {
-                if(visited[row][col] == 0 && grid[row][col] == '1') {
-                    bfs(grid, visited, row, col, n, m);
-                    count++;
+                if(grid[row][col] == '1' && !visited[row][col]) {
+                    bfs(grid, visited, row, col);
+                    islands++;
                 }
             }
         }
-        return count;
+
+        return islands;
     }
 }
