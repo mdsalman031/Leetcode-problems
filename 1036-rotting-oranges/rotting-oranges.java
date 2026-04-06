@@ -1,63 +1,47 @@
-class Pair {
-    int first, second;
-    public Pair(int first, int second) {
-        this.first = first;
-        this.second = second;
-    }
-}
 class Solution {
     public int orangesRotting(int[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
-        Queue<Pair> q = new LinkedList<>();
-        int[][] visited = new int[n][m];
+        Queue<int[]> q = new LinkedList<>();
+        int[][] visited = new int[n][m] ;
 
         for(int i = 0 ; i < n ; i++) {
             for(int j = 0 ; j < m ; j++) {
                 if(grid[i][j] == 2) {
-                    q.offer(new Pair(i, j));
-                    visited[i][j] = 1;
-                } 
+                    q.add(new int[]{i, j, 0});
+                    visited[i][j] = 2;
+                }
             }
-        }
+        }   
 
+        int time = 0;
         int[] drow = {-1, 0, 1, 0};
         int[] dcol = {0, 1, 0, -1};
-        int minute = 0;
 
         while(!q.isEmpty()) {
-            int size = q.size();
-            boolean rotten = false;
-
-            for(int i = 0 ; i < size ; i++) {
-                int row = q.peek().first;
-                int col = q.peek().second;
-                q.poll();
-
-                for(int k = 0 ; k < 4 ; k++) {
-                    int nrow = row + drow[k];
-                    int ncol = col + dcol[k];
-
-                    if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                            grid[nrow][ncol] == 1 && visited[nrow][ncol] == 0) {
-                        grid[nrow][ncol] = 2;
-                        visited[nrow][ncol] = 1;
-                        q.offer(new Pair(nrow, ncol));
-                        rotten = true;
-                    }
+            int[] node = q.poll();
+            int r = node[0];
+            int c = node[1];
+            int t = node[2];
+            time = Math.max(time, t);
+            for(int k = 0 ; k < 4 ; k++) {
+                int nrow = r + drow[k];
+                int ncol = c + dcol[k];
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && visited[nrow][ncol] != 2 && grid[nrow][ncol] == 1) {
+                    q.add(new int[]{nrow, ncol, t + 1});
+                    visited[nrow][ncol] = 2;
                 }
-            } 
-            if(rotten) minute++;
+            }
         }
 
         for(int i = 0 ; i < n ; i++) {
             for(int j = 0 ; j < m ; j++) {
-                if(grid[i][j] == 1) {
+                if(grid[i][j] == 1 && visited[i][j] != 2) {
                     return -1;
-                } 
+                }
             }
-        }
+        }   
 
-        return minute;
+        return time;
     }
 }
