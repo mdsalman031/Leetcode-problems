@@ -1,41 +1,35 @@
 class Solution {
-    private boolean dfs(int[][] graph, boolean[] visited, boolean[] pathVisited, boolean[] check, int node) {
+    private boolean dfs(int[][] adj, boolean[] visited, boolean[] pathVisited, int[] check, int node) {
         visited[node] = true;
         pathVisited[node] = true;
 
-        for(int adjacent : graph[node]) {
-            if(!visited[adjacent]) {
-                if(dfs(graph, visited, pathVisited, check, adjacent)) {
-                    return true;
-                }
-            }
-            else if(pathVisited[adjacent]) {
+        for(int adjNode : adj[node]) {
+            if(!visited[adjNode]) {
+                if(dfs(adj, visited, pathVisited, check, adjNode)) return true;
+            } else if(pathVisited[adjNode]) {
                 return true;
             }
         }
-
         pathVisited[node] = false;
-        check[node] = true; // safe node
+        check[node] = 1;
 
         return false;
     }
-    public List<Integer> eventualSafeNodes(int[][] graph) {
-        int V = graph.length;
+    public List<Integer> eventualSafeNodes(int[][] adj) {
+        int V = adj.length;
         boolean[] visited = new boolean[V];
         boolean[] pathVisited = new boolean[V];
-        boolean[] check = new boolean[V];
+        int[] check = new int[V];
 
         for(int i = 0 ; i < V ; i++) {
-            if(!visited[i]) {
-                dfs(graph, visited, pathVisited, check, i);
-            }
+            dfs(adj, visited, pathVisited, check, i);
         }
 
-        List<Integer> safeNodes = new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
         for(int i = 0 ; i < V ; i++) {
-            if(check[i]) safeNodes.add(i);
+            if(check[i] == 1) res.add(i);
         }
 
-        return safeNodes;
+        return res;
     }
 }
