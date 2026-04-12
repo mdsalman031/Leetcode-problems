@@ -1,35 +1,33 @@
 class Solution {
-    private boolean dfs(int[][] adj, boolean[] visited, boolean[] pathVisited, int[] check, int node) {
-        visited[node] = true;
-        pathVisited[node] = true;
-
-        for(int adjNode : adj[node]) {
-            if(!visited[adjNode]) {
-                if(dfs(adj, visited, pathVisited, check, adjNode)) return true;
-            } else if(pathVisited[adjNode]) {
-                return true;
-            }
-        }
-        pathVisited[node] = false;
-        check[node] = 1;
-
-        return false;
-    }
     public List<Integer> eventualSafeNodes(int[][] adj) {
         int V = adj.length;
-        boolean[] visited = new boolean[V];
-        boolean[] pathVisited = new boolean[V];
-        int[] check = new int[V];
+        List<List<Integer>> adjRev = new ArrayList<>();
+        for(int i = 0 ; i < V ; i++) adjRev.add(new ArrayList<>());
+        int[] indegree = new int[V];
 
         for(int i = 0 ; i < V ; i++) {
-            dfs(adj, visited, pathVisited, check, i);
+            for(int adjNode : adj[i]) {
+                adjRev.get(adjNode).add(i);
+                indegree[i]++;
+            }
         }
 
-        List<Integer> res = new ArrayList<>();
+        Queue<Integer> q = new LinkedList<>();
         for(int i = 0 ; i < V ; i++) {
-            if(check[i] == 1) res.add(i);
+            if(indegree[i] == 0) q.add(i);
         }
 
-        return res;
+        List<Integer> safeNodes = new ArrayList<>();
+        while(!q.isEmpty()) {
+            int node = q.poll();
+            safeNodes.add(node);
+            for(int adjNode : adjRev.get(node)) {
+                indegree[adjNode]--;
+                if(indegree[adjNode] == 0) q.add(adjNode);
+            }
+        }
+        Collections.sort(safeNodes);
+
+        return safeNodes;
     }
 }
