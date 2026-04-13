@@ -1,46 +1,35 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        // Using topological sort to determine a schedule of courses
-        // If the schedule (linear ordering) contains all the courses, then return true otherwise false
-        // Using Kahn's algorithm to find topo sort
-
         List<List<Integer>> adj = new ArrayList<>();
-        for(int i = 0 ; i < numCourses ; i++) {
-            adj.add(new ArrayList<>());
+        for(int i = 0 ; i < numCourses ; i++) adj.add(new ArrayList<>());
+
+        for(int i = 0 ; i < prerequisites.length ; i++) {
+            adj.get(prerequisites[i][0]).add(prerequisites[i][1]);
         }
 
-        for(int[] edge : prerequisites) {
-            int src = edge[0];
-            int dest = edge[1];
-            adj.get(src).add(dest);
-        }
-
-        // Step 1 : Store all indegrees
-        int[] indegree = new int[numCourses];
-        for(int i = 0 ; i < numCourses ; i++) {
-            for(int adjacent : adj.get(i)) {
-                indegree[adjacent]++;
+        int V = adj.size();
+        int[] indegree = new int[V];
+        for(int i = 0 ; i < V ; i++) {
+            for(int adjNode : adj.get(i)) {
+                indegree[adjNode]++;
             }
         }
 
-        // Step 2 : Enqueue all the nodes with indegree 0
         Queue<Integer> q = new LinkedList<>();
-        for(int i = 0 ; i < numCourses ; i++) {
+        for(int i = 0 ; i < V ; i++) {
             if(indegree[i] == 0) q.add(i);
         }
 
-        // Step 3 : Pop the queue and store element in topo, and if its adjacent nodes have indegree 0 push them to queue
-        List<Integer> topo = new ArrayList<>();
+        int totalTasks = 0;
         while(!q.isEmpty()) {
             int node = q.poll();
-            topo.add(node);
-
-            for(int adjacent : adj.get(node)) {
-                indegree[adjacent]--;
-                if(indegree[adjacent] == 0) q.add(adjacent);
+            totalTasks++;
+            for(int adjNode : adj.get(node)) {
+                indegree[adjNode]--;
+                if(indegree[adjNode] == 0) q.add(adjNode);
             }
         }
 
-        return (topo.size() == numCourses) ? true : false;
+        return totalTasks == V;
     }
 }
