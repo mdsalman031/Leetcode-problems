@@ -36,6 +36,8 @@ class Solution {
             int node = pq.peek().node;
             pq.poll();
 
+            if(time > dist[node]) continue;
+
             for(int[] edge : graph.get(node)) {
                 int adjNode = edge[0];
                 int adjTime = edge[1];
