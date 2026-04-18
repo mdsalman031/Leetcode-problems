@@ -16,7 +16,7 @@ class Solution {
         }
         dist[src] = 0;
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0]-b[0]);
+        Queue<int[]> pq = new LinkedList<>();
         pq.add(new int[]{0, src, 0});
 
         int cheapestFlight = Integer.MAX_VALUE;
