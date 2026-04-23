@@ -1,24 +1,28 @@
 class Solution {
-    public boolean checkValidString(String s) {
-        int min = 0, max = 0;
-        int n = s.length();
+    private boolean helper(int index, String s, int count, Boolean[][] dp) {
+        if(count < 0) return false;
 
-        for(int i = 0 ; i < n ; i++) {
-            if(s.charAt(i) == '(') {
-                min = min + 1;
-                max = max + 1;
-            } else if(s.charAt(i) == ')') {
-                min = min - 1;
-                max = max - 1;
-            } else {
-                min = min - 1;
-                max = max + 1;
-            }
+        if(index == s.length()) return count == 0;
+        if(dp[index][count] != null) return dp[index][count];
 
-            if(min < 0) min = 0;
-            if(max < 0) return false;
+        char ch = s.charAt(index);
+        boolean result;
+
+        if(ch == '(') {
+            result = helper(index + 1, s, count + 1, dp);
+        } else if(ch == ')') {
+            result = helper(index + 1, s, count - 1, dp);
+        } else {
+            result = helper(index + 1, s, count + 1, dp) ||
+                    helper(index + 1, s, count - 1, dp) ||
+                    helper(index + 1, s, count, dp);
         }
 
-        return min == 0;
+        return dp[index][count] = result;
+    }
+    public boolean checkValidString(String s) {
+        int n = s.length();
+        Boolean[][] dp = new Boolean[n][n];
+        return helper(0, s, 0, dp);
     }
 }
