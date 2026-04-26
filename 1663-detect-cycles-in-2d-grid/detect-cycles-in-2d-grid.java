@@ -1,23 +1,24 @@
 class Solution {
-    private boolean dfs(char[][] grid, boolean[][] visited, int r, int c, int parentRow, int parentCol) {
-        visited[r][c] = true;
-        int[] drow = {-1, 0, 1, 0};
-        int[] dcol = {0, 1, 0, -1};
+    private boolean dfs(char[][] grid, boolean[][] visited, int row, int col, int pRow, int pCol) {
+        visited[row][col] = true;
         int n = grid.length;
         int m = grid[0].length;
 
-        for(int k = 0 ; k < 4 ; k++) {
-            int nrow = r + drow[k];
-            int ncol = c + dcol[k];
+        int[] drow = {-1, 0, 1, 0};
+        int[] dcol = {0, 1, 0, -1};
 
-            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == grid[r][c]) {
-                if(visited[nrow][ncol] && (nrow != parentRow || ncol != parentCol)) {
+        for(int k = 0 ; k < 4 ; k++) {
+            int nrow = row + drow[k];
+            int ncol = col + dcol[k];
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == grid[row][col]) {
+                if(!visited[nrow][ncol]) {
+                    if(dfs(grid, visited, nrow, ncol, row, col)) return true;
+                } else if(nrow != pRow || ncol != pCol) {
                     return true;
-                } else if(!visited[nrow][ncol]) {
-                    if(dfs(grid, visited, nrow, ncol, r, c)) return true;
                 }
-            } 
+            }
         }
+
         return false;
     }
     public boolean containsCycle(char[][] grid) {
@@ -32,7 +33,6 @@ class Solution {
                 }
             }
         }
-
         return false;
     }
 }
