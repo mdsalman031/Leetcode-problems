@@ -1,10 +1,10 @@
 class Solution {
     public int countPrimes(int n) {
-        int[] seive = new int[n + 1];
+        int[] seive = new int[n];
 
-        for(int i = 2 ; i*i <= n ; i++) {
+        for(int i = 2 ; i*i < n ; i++) {
             if(seive[i] == 0) {
-                for(int j = i * i ; j <= n ; j += i) {
+                for(int j = i * i ; j < n ; j += i) {
                     seive[j] = 1;
                 }
             }
