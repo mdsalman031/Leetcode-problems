@@ -1,31 +1,32 @@
 class Solution {
-    private int[] getPrimes() {
-        int[] seive = new int[1001];
+    private int[] smallestPrimeFactor() {
+        int max = (int)1e5;
+        int[] spf = new int[max + 1];
+        for(int i = 2 ; i <= max ; i++) spf[i] = i;
 
-        for(int i = 2 ; i*i <= 1000 ; i++) {
-            if(seive[i] == 0) {
-                for(int j = i*i ; j <= 1000 ; j += i) {
-                    seive[j] = 1;
+        for(int i = 2 ; i*i <= max ; i++) {
+            if(spf[i] == i) {
+                for(int j = i*i ; j <= max ; j += i) {
+                    if(spf[j] == j) {
+                        spf[j] = i;
+                    }
                 }
             }
         }
 
-        return seive;
+        return spf;
     }
     public int distinctPrimeFactors(int[] nums) {
         int n = nums.length;
-        int[] primes = getPrimes();
         Set<Integer> set = new HashSet<>();
+        int[] spf = smallestPrimeFactor();
 
         for(int i = 0 ; i < n ; i++) {
             int num = nums[i];
-            for(int j = 2 ; j*j <= num ; j++) {
-                while(num % j == 0 && primes[j] == 0) {
-                    set.add(j);
-                    num /= j;
-                }
+            while(num != 1) {
+                set.add(spf[num]);
+                num /= spf[num];
             }
-            if(num > 1) set.add(num);
         }
 
         return set.size();
