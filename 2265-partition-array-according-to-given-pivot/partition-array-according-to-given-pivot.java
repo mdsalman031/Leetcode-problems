@@ -9,8 +9,8 @@ class Solution {
             if(nums[j] > pivot) ans[right--] = nums[j];
         }
 
-        for(int i = left ; i <= right ; i++) {
-            ans[i] = pivot;
+        while(left <= right) {
+            ans[left++] = pivot;
         }
 
         return ans;
