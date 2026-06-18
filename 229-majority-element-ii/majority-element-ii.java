@@ -1,19 +1,19 @@
 class Solution {
     public List<Integer> majorityElement(int[] nums) {
-        int n = nums.length;
+        int candidate1 = Integer.MIN_VALUE, candidate2 = Integer.MIN_VALUE; 
         int count1 = 0, count2 = 0;
-        int candidate1 = Integer.MIN_VALUE, candidate2 = Integer.MIN_VALUE;
+        List<Integer> result = new ArrayList<>();
 
-        for(int i = 0 ; i < n ; i++) {
-            if(count1 == 0 && nums[i] != candidate2) {
-                count1 = 1;
-                candidate1 = nums[i];
-            } else if(count2 == 0 && nums[i] != candidate1) {
-                count2 = 1;
-                candidate2 = nums[i];
-            } else if(nums[i] == candidate1) {
+        for(int num : nums) {
+            if(count1 == 0 && num != candidate2) {
                 count1++;
-            } else if(nums[i] == candidate2) {
+                candidate1 = num;
+            } else if(count2 == 0 && num != candidate1) {
+                count2++;
+                candidate2 = num;
+            } else if(num == candidate1) {
+                count1++;
+            } else if(num == candidate2) {
                 count2++;
             } else {
                 count1--;
@@ -21,17 +21,18 @@ class Solution {
             }
         }
 
-        List<Integer> list = new ArrayList<>();
-        int min = (n / 3) + 1;
+        int min = nums.length / 3;
         count1 = 0;
         count2 = 0;
-        for(int i = 0 ; i < n ; i++) {
-            if(nums[i] == candidate1) count1++;
-            if(nums[i] == candidate2) count2++;
-        }
-        if(count1 >= min) list.add(candidate1);
-        if(count2 >= min) list.add(candidate2);
 
-        return list;
+        for(int num : nums) {
+            if(num == candidate1) count1++;
+            if(num == candidate2) count2++;
+        }
+
+        if(count1 > min) result.add(candidate1);
+        if(count2 > min) result.add(candidate2);
+
+        return result;
     }
 }
