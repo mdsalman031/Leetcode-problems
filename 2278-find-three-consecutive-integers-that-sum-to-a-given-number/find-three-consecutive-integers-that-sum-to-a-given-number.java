@@ -1,8 +1,13 @@
 class Solution {
     public long[] sumOfThree(long num) {
-        long temp = (long) Math.ceil((double)num / 3);
-        long a = temp - 1, b = temp, c = temp + 1;
-        
-        return (a + b + c) == num ? new long[]{a, b, c} : new long[]{};
+        if(num % 3 != 0) return new long[]{};
+
+        long temp = num / 3;
+        long[] ans = new long[3];
+        ans[0] = temp - 1;
+        ans[1] = temp;
+        ans[2] = temp + 1;
+
+        return ans;
     }
 }
