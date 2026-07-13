@@ -3,18 +3,16 @@ class Solution {
         String helper = "123456789";
         List<Integer> res = new ArrayList<>();
 
-        int numDigits = (int) Math.log10(low) + 1;
+        int minLen = String.valueOf(low).length();
+        int maxLen = String.valueOf(high).length();
 
-        for(int i = 0 ; i < 10 ; i++) {
-            for(int j = numDigits + i ; j < 10 ; j++) {
-                int num = Integer.parseInt(helper.substring(i, j));
-                if(num < low) continue;
-                if(num > high) break;
-                res.add(num);
+        for(int len = minLen ; len <= maxLen ; len++) {
+            for(int start = 0 ; start + len <= 9 ; start++) {
+                int num = Integer.parseInt(helper.substring(start, start + len));
+
+                if(num >= low && num <= high) res.add(num);
             }
         }
-
-        Collections.sort(res);
 
         return res;
     }
