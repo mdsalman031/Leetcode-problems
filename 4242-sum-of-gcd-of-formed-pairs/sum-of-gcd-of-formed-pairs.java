@@ -9,7 +9,7 @@ class Solution {
 
         int maxi = Integer.MIN_VALUE;
         for(int i = 0 ; i < n ; i++) {
-            maxi = Math.max(maxi, nums[i]);
+            if(nums[i] > maxi) maxi = nums[i];
             prefixGcd[i] = gcd(nums[i], maxi);
         }
 
